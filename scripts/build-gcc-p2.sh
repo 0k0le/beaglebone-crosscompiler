@@ -20,35 +20,27 @@ cd build
 
 if [[ "$ARCH" != "x86_64" ]]; then
 
-../configure --target=$TARGET --prefix=$PREFIX --with-gnu-ld --with-gnu-as \
+../configure --target=$TARGET --prefix=$PREFIX/usr --with-gnu-ld --with-gnu-as \
 	--with-arch=$ARCH \
 	--build=x86_64-linux-gnu --host=$HOST \
+	--disable-multilib \
 	--disable-bootstrap \
-	--disable-libsanitizer \
 	--disable-werror \
-	--disable-libgomp \
-	--disable-libitm \
-	--disable-libquadmath \
-	--disable-libssp --disable-libvtv \
-	--disable-libcilkrts --disable-libatomic \
-	--enable-shared --disable-nls --enable-multilib \
-	--enable-languages=c,c++
+	--enable-shared --disable-nls \
+	--enable-languages=c,c++ \
+	--with-sysroot=$PREFIX
 
 else
-	
-../configure --target=$TARGET --prefix=$PREFIX --with-gnu-ld --with-gnu-as \
+
+../configure --target=$TARGET --prefix=$PREFIX/usr --with-gnu-ld --with-gnu-as \
 	--build=x86_64-linux-gnu --host=$HOST \
+	--disable-multilib \
 	--disable-bootstrap \
-	--disable-libsanitizer \
 	--with-system-zlib \
 	--disable-werror \
-	--disable-libgomp \
-	--disable-libitm \
-	--disable-libquadmath \
-	--disable-libssp --disable-libvtv \
-	--disable-libcilkrts --disable-libatomic \
-	--enable-shared --disable-nls --enable-multilib \
-	--enable-languages=c,c++
+	--enable-shared --disable-nls \
+	--enable-languages=c,c++ \
+	--with-sysroot=$PREFIX
 
 fi
 

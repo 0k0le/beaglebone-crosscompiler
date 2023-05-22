@@ -51,7 +51,16 @@ fi
 scripts/copy-kernel-headers.sh $BASEDIR $PREFIX $TARGET $NPROC $BASEDIR/3rd/linux x86_64
 if [ $? != 0 ]
 	then
-		fail "Failed to copy kernel headers"
+		fail "Failed to copy kernel headers 1"
+fi
+
+mkdir -p $PREFIX/ti
+
+# Copy kernel headers
+scripts/copy-kernel-headers.sh $BASEDIR $PREFIX/ti $TARGET $NPROC $BASEDIR/3rd/ti-linux-kernel arm
+if [ $? != 0 ]
+	then
+		fail "Failed to copy kernel headers 2"
 fi
 
 # Build GCC part 1
@@ -61,11 +70,26 @@ if [ $? != 0 ]
 		fail "Failed to build first part of gcc"
 fi
 
-# Build glibc
-scripts/build-glibc.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST x86_64
+mkdir -p $PREFIX/arm
+
+# Build glibc arm
+scripts/build-glibc.sh $BASEDIR $PREFIX/arm $TARGET $NPROC arm-linux-gnueabi armv7l $PREFIX/ti/usr/include
 if [ $? != 0 ]
 	then
-		fail "Failed to build glibc"
+		fail "Failed to build glibc 1"
+fi
+
+cd $BASEDIR/3rd/glibc/build
+make distclean
+cd ..
+rm -rf build
+cd $BASEDIR
+
+# Build glibc x86_64
+scripts/build-glibc.sh $BASEDIR $PREFIX x86_64-linux-gnu $NPROC x86_64-linux-gnu x86_64 $PREFIX/usr/include
+if [ $? != 0 ]
+	then
+		fail "Failed to build glibc 2"
 fi
 
 # Build GCC part 2

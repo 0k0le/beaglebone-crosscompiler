@@ -6,6 +6,7 @@ TARGET=$3
 NPROC=$4
 ARCH=$6
 HOST=$5
+HEADERS=$7
 
 echo "[GLIBC build info]"
 echo "BASEDIR: $BASEDIR"
@@ -21,8 +22,9 @@ cd build
 if [[ "$ARCH" != "x86_64" ]]; then
 
 # Configure build
-../configure --target=$TARGET --prefix=$PREFIX \
+../configure --prefix=$PREFIX/usr \
 	--host=$HOST --build=x86_64-linux-gnu \
+	--enable-multilib \
 	--disable-werror \
 	--with-arch=$ARCH \
 	--with-gnu-ld --with-gnu-as \
@@ -39,19 +41,18 @@ if [[ "$ARCH" != "x86_64" ]]; then
 	--without-selinux \
 	--with-tls \
 	--enable-hacker-mode \
-	--with-headers=$PREFIX/include
+	--with-headers=$HEADERS
 
 else
 
 # Configure build
-../configure --target=$TARGET --prefix=$PREFIX \
+../configure --prefix=$PREFIX/usr \
 	--host=$HOST --build=x86_64-linux-gnu \
+	--enable-multilib \
 	--disable-werror \
 	--with-gnu-ld --with-gnu-as \
-	CFLAGS="-O2 -DBOOTSTRAP_GCC" \
 	libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes \
 	libc_cv_gnu89_inline=yes \
-	libc_cv_ssp=no \
 	--without-cvs \
 	--disable-nls \
 	--disable-sanity-checks \
@@ -62,7 +63,7 @@ else
 	--with-tls \
 	--with-system-zlib \
 	--enable-hacker-mode \
-	--with-headers=$PREFIX/include
+	--with-headers=$HEADERS
 
 fi
 
@@ -79,5 +80,11 @@ make install && \
 
 echo "GLIBC has built successfully!" && \
 exit 0
+
+echo "[GLIBC build info]"
+echo "BASEDIR: $BASEDIR"
+echo "PREFIX: $PREFIX"
+echo "TARGET: $TARGET"
+echo "HOST: $HOST"
 
 exit 1

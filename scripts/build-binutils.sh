@@ -17,21 +17,23 @@ cd $BASEDIR/3rd/binutils-gdb && \
 mkdir -p build && \
 cd build
 
-if [[ ! -z "$ARCH" ]]; then
+if [[ "$ARCH" != "x86_64" ]]; then
 
 # Configure build
-../configure --target=$TARGET --prefix=$PREFIX --disable-nls --disable-werror \
+../configure --target=$TARGET --prefix=$PREFIX/usr --disable-nls --disable-werror \
 	--with-arch=$ARCH --disable-gdb --disable-libdecnumber \
 	--build=x86_64-linux-gnu --host=$HOST \
+	--with-sysroot=$PREFIX \
 	--disable-readline --disable-sim
 
 else
 
 # Configure build
-../configure --target=$TARGET --prefix=$PREFIX --disable-nls --disable-werror \
+../configure --target=$TARGET --prefix=$PREFIX/usr --disable-nls --disable-werror \
 	--disable-gdb --disable-libdecnumber \
 	--with-system-zlib \
 	--build=x86_64-linux-gnu --host=$HOST \
+	--with-sysroot=$PREFIX \
 	--disable-readline --disable-sim
 
 fi

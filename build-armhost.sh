@@ -12,7 +12,7 @@ fail () {
 BASEDIR=$(pwd)
 PREFIX=$BASEDIR/armv7l
 TARGET=arm-linux-gnueabi
-NPROC=8
+NPROC=4
 HOST=$TARGET
 
 re='^[0-9]+$'
@@ -55,7 +55,7 @@ if [ $? != 0 ]
 fi
 
 # Build GCC part 1
-scripts/build-gcc-p1.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST armv7
+scripts/build-gcc-p1.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST armv7-a
 if [ $? != 0 ]
 	then
 		fail "Failed to build first part of gcc"
@@ -69,7 +69,7 @@ if [ $? != 0 ]
 fi
 
 # Build GCC part 2
-scripts/build-gcc-p2.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST armv7
+scripts/build-gcc-p2.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST armv7-a
 if [ $? != 0 ]
 	then
 		fail "Failed to build GCC part 2"

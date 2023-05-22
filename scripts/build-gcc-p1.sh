@@ -23,14 +23,16 @@ cd build
 
 if [[ "$ARCH" != "x86_64" ]]; then
 
-../configure --target=$TARGET --prefix=$PREFIX \
+../configure --target=$TARGET --prefix=$PREFIX/usr \
 	--build=x86_64-linux-gnu --host=$HOST \
 	--with-arch=$ARCH \
+	--with-sysroot=$PREFIX \
+	--disable-multilib \
 	--disable-bootstrap \
-	--disable-shared --disable-nls --enable-multilib \
+	--disable-shared --disable-nls \
 	--disable-threads \
 	--with-newlib --without-headers \
-	--enable-languages=c,c++ \
+	--enable-languages=c \
 	--disable-libgomp --disable-libitm --disable-libquadmath \
 	--disable-libsanitizer --disable-libssp --disable-libvtv \
 	--disable-libcilkrts --disable-libatomic
@@ -38,14 +40,16 @@ if [[ "$ARCH" != "x86_64" ]]; then
 else
 
 # Configure build
-../configure --target=$TARGET --prefix=$PREFIX \
+../configure --target=$TARGET --prefix=$PREFIX/usr \
 	--build=x86_64-linux-gnu --host=$HOST \
+	--disable-multilib \
 	--disable-bootstrap \
-	--disable-shared --disable-nls --enable-multilib \
+	--disable-shared --disable-nls \
+	--with-sysroot=$PREFIX \
 	--with-system-zlib \
 	--disable-threads \
 	--with-newlib --without-headers \
-	--enable-languages=c,c++ \
+	--enable-languages=c \
 	--disable-libgomp --disable-libitm --disable-libquadmath \
 	--disable-libsanitizer --disable-libssp --disable-libvtv \
 	--disable-libcilkrts --disable-libatomic

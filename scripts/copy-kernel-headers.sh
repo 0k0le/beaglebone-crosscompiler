@@ -9,13 +9,15 @@ DIR=$5
 
 echo "Installing kernel headers"
 
+mkdir -p $PREFIX/usr
+
 cd $DIR
 
 if [[ "$ARCH" != "x86_64" ]]
 	then
-		make headers_install ARCH=$ARCH INSTALL_HDR_PATH=$PREFIX
+		make headers_install ARCH=$ARCH INSTALL_HDR_PATH=$PREFIX/usr
 	else
-		make headers_install INSTALL_HDR_PATH=$PREFIX
+		make headers_install INSTALL_HDR_PATH=$PREFIX/usr
 fi
 
 if [ $? == 0 ]
