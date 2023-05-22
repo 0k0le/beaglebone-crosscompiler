@@ -17,7 +17,9 @@ cd build && \
 
 # Configure build
 ../configure --target=$TARGET --prefix=$PREFIX --disable-nls --disable-werror \
-	--disable-gdb --disable-libdecnumber --disable-readline --disable-sim && \
+	--with-arch=armv7l --disable-gdb --disable-libdecnumber \
+	--build=x86_64-linux-gnu --host=$TARGET \
+	--disable-readline --disable-sim && \
 
 # Build
 make -j$NPROC && \

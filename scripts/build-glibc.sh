@@ -18,8 +18,11 @@ cd build && \
 
 # Configure build
 ../configure --target=$TARGET --prefix=$PREFIX \
-	--build=x86_64-linux-gnu \
+	--host=$TARGET --build=x86_64-linux-gnu \
+	--disable-werror \
+	--with-arch=armv7l \
 	--with-gnu-ld --with-gnu-as \
+	CFLAGS="-O2 -DBOOTSTRAP_GCC" \
 	libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes \
 	libc_cv_gnu89_inline=yes \
 	libc_cv_ssp=no \
@@ -33,6 +36,9 @@ cd build && \
 	--with-tls \
 	--enable-hacker-mode \
 	--with-headers=$PREFIX/include && \
+
+# Install headers
+make install-bootstrap-headers=yes install-headers
 
 # Build and install
 make -j$NPROC && \

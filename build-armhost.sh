@@ -12,7 +12,7 @@ fail () {
 BASEDIR=$(pwd)
 PREFIX=$BASEDIR/armv7l
 TARGET=arm-linux-gnueabi
-NPROC=10
+NPROC=8
 
 # Check if arg exists
 if [ -z "$1" ]
@@ -60,6 +60,13 @@ scripts/build-glibc.sh $BASEDIR $PREFIX $TARGET $NPROC
 if [ $? != 0 ]
 	then
 		fail "Failed to build glibc"
+fi
+
+# Build GCC part 2
+scripts/build-gcc-p2.sh $BASEDIR $PREFIX $TARGET $NPROC
+if [ $? != 0 ]
+	then
+		fail "Failed to build GCC part 2"
 fi
 
 echo "Cross compiler has built successfully!"

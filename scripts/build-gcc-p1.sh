@@ -21,12 +21,13 @@ cd build && \
 
 # Configure build
 ../configure --target=$TARGET --prefix=$PREFIX \
+	--build=x86_64-linux-gnu --host=$TARGET \
+	--with-arch=armv7 \
 	--disable-bootstrap \
 	--disable-shared --disable-nls --enable-multilib \
 	--disable-threads \
 	--with-newlib --without-headers \
-	--enable-languages=c \
-	--with-system-zlib \
+	--enable-languages=c,c++ \
 	--disable-libgomp --disable-libitm --disable-libquadmath \
 	--disable-libsanitizer --disable-libssp --disable-libvtv \
 	--disable-libcilkrts --disable-libatomic && \
