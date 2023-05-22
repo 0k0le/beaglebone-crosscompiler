@@ -10,10 +10,10 @@ fail () {
 }
 
 BASEDIR=$(pwd)
-PREFIX=$BASEDIR/armv7l
+PREFIX=$BASEDIR/x86_64
 TARGET=arm-linux-gnueabi
 NPROC=8
-HOST=$TARGET
+HOST=x86_64-linux-gnu
 
 re='^[0-9]+$'
 
@@ -41,35 +41,35 @@ mkdir -p $PREFIX
 scripts/update-modules.sh
 
 # Build binutils
-scripts/build-binutils.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST armv7l
+scripts/build-binutils.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST x86_64
 if [ $? != 0 ]
 	then
 		fail "Failed to build binutils"
 fi
 
 # Copy kernel headers
-scripts/copy-kernel-headers.sh $BASEDIR $PREFIX $TARGET $NPROC $BASEDIR/3rd/ti-linux-kernel arm
+scripts/copy-kernel-headers.sh $BASEDIR $PREFIX $TARGET $NPROC $BASEDIR/3rd/linux x86_64
 if [ $? != 0 ]
 	then
 		fail "Failed to copy kernel headers"
 fi
 
 # Build GCC part 1
-scripts/build-gcc-p1.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST armv7
+scripts/build-gcc-p1.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST x86_64
 if [ $? != 0 ]
 	then
 		fail "Failed to build first part of gcc"
 fi
 
 # Build glibc
-scripts/build-glibc.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST armv7l
+scripts/build-glibc.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST x86_64
 if [ $? != 0 ]
 	then
 		fail "Failed to build glibc"
 fi
 
 # Build GCC part 2
-scripts/build-gcc-p2.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST armv7
+scripts/build-gcc-p2.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST x86_64
 if [ $? != 0 ]
 	then
 		fail "Failed to build GCC part 2"
