@@ -1,0 +1,16 @@
+[submodule "3rd/glibc"]
+	path = 3rd/glibc
+	url = https://sourceware.org/git/glibc.git
+	branch = release/2.28/master
+[submodule "3rd/binutils-gdb"]
+	path = 3rd/binutils-gdb
+	url = git://sourceware.org/git/binutils-gdb.git
+	branch = binutils-2_31-branch
+[submodule "3rd/gcc"]
+	path = 3rd/gcc
+	url = git://gcc.gnu.org/git/gcc.git
+	branch = releases/gcc-8
+[submodule "3rd/ti-linux-kernel"]
+	path = 3rd/ti-linux-kernel
+	url = https://git.ti.com/git/ti-linux-kernel/ti-linux-kernel.git
+	branch = linux-4.19.y
