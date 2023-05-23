@@ -24,7 +24,6 @@ if [[ "$ARCH" != "x86_64" ]]; then
 # Configure build
 ../configure --prefix=$PREFIX/usr \
 	--host=$HOST --build=x86_64-linux-gnu \
-	--enable-multilib \
 	--disable-werror \
 	--with-arch=$ARCH \
 	--with-gnu-ld --with-gnu-as \
@@ -72,7 +71,7 @@ if [[ $? != 0 ]]; then
 fi
 
 # Install headers
-make install-bootstrap-headers=yes install-headers
+#make install-bootstrap-headers=yes install-headers
 
 # Build and install
 make -j$NPROC && \

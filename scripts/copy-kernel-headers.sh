@@ -8,6 +8,7 @@ ARCH=$6
 DIR=$5
 
 echo "Installing kernel headers"
+echo "[PREFIX]: $PREFIX"
 
 mkdir -p $PREFIX/usr
 

@@ -73,7 +73,7 @@ fi
 mkdir -p $PREFIX/arm
 
 # Build glibc arm
-scripts/build-glibc.sh $BASEDIR $PREFIX/arm $TARGET $NPROC arm-linux-gnueabi armv7l $PREFIX/ti/usr/include
+scripts/build-glibc.sh $BASEDIR $PREFIX/ti $TARGET $NPROC arm-linux-gnueabi armv7l $PREFIX/ti/usr/include
 if [ $? != 0 ]
 	then
 		fail "Failed to build glibc 1"

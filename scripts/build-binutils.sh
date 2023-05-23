@@ -7,6 +7,12 @@ NPROC=$4
 ARCH=$6
 HOST=$5
 
+if [[ "$7" != "none" ]]; then
+    SYSROOT=--with-sysroot=$7  
+else
+    SYSROOT=
+fi
+
 echo "[BINUTILS build info]"
 echo "BASEDIR: $BASEDIR"
 echo "PREFIX: $PREFIX"
@@ -23,7 +29,7 @@ if [[ "$ARCH" != "x86_64" ]]; then
 ../configure --target=$TARGET --prefix=$PREFIX/usr --disable-nls --disable-werror \
 	--with-arch=$ARCH --disable-gdb --disable-libdecnumber \
 	--build=x86_64-linux-gnu --host=$HOST \
-	--with-sysroot=$PREFIX \
+	$SYSROOT \
 	--disable-readline --disable-sim
 
 else
@@ -33,7 +39,7 @@ else
 	--disable-gdb --disable-libdecnumber \
 	--with-system-zlib \
 	--build=x86_64-linux-gnu --host=$HOST \
-	--with-sysroot=$PREFIX \
+	$SYSROOT \
 	--disable-readline --disable-sim
 
 fi

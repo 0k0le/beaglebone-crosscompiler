@@ -7,6 +7,12 @@ NPROC=$4
 ARCH=$6
 HOST=$5
 
+if [[ "$7" != "none" ]]; then
+	SYSROOT=--with-sysroot=$7
+else
+	SYSROOT=
+fi
+
 echo "[GCC P1 build info]"
 echo "BASEDIR: $BASEDIR"
 echo "PREFIX: $PREFIX"
@@ -25,14 +31,13 @@ if [[ "$ARCH" != "x86_64" ]]; then
 
 ../configure --target=$TARGET --prefix=$PREFIX/usr \
 	--build=x86_64-linux-gnu --host=$HOST \
+	$SYSROOT \
 	--with-arch=$ARCH \
-	--with-sysroot=$PREFIX \
-	--disable-multilib \
 	--disable-bootstrap \
-	--disable-shared --disable-nls \
+	--disable-shared --disable-nls --disable-multilib \
 	--disable-threads \
 	--with-newlib --without-headers \
-	--enable-languages=c \
+	--enable-languages=c,c++ \
 	--disable-libgomp --disable-libitm --disable-libquadmath \
 	--disable-libsanitizer --disable-libssp --disable-libvtv \
 	--disable-libcilkrts --disable-libatomic
@@ -42,14 +47,13 @@ else
 # Configure build
 ../configure --target=$TARGET --prefix=$PREFIX/usr \
 	--build=x86_64-linux-gnu --host=$HOST \
-	--disable-multilib \
+	$SYSROOT \
 	--disable-bootstrap \
-	--disable-shared --disable-nls \
-	--with-sysroot=$PREFIX \
+	--disable-shared --disable-nls --enable-multilib \
 	--with-system-zlib \
 	--disable-threads \
 	--with-newlib --without-headers \
-	--enable-languages=c \
+	--enable-languages=c,c++ \
 	--disable-libgomp --disable-libitm --disable-libquadmath \
 	--disable-libsanitizer --disable-libssp --disable-libvtv \
 	--disable-libcilkrts --disable-libatomic

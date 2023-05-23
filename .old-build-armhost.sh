@@ -62,7 +62,7 @@ if [ $? != 0 ]
 fi
 
 # Build glibc
-scripts/build-glibc.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST armv7l
+scripts/build-glibc.sh $BASEDIR $PREFIX $TARGET $NPROC $HOST armv7l $PREFIX/usr/include
 if [ $? != 0 ]
 	then
 		fail "Failed to build glibc"
