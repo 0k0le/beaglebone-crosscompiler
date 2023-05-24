@@ -4,8 +4,15 @@ BASEDIR=$1
 PREFIX=$2
 TARGET=$3
 NPROC=$4
-ARCH=$6
 HOST=$5
+
+if [[ "$6" != "x86_64" ]]; then
+	ARCH=--with-arch=$6
+	ZLIB=
+else
+	ARCH=
+	ZLIB=--with-system-zlib
+fi
 
 if [[ "$7" != "none" ]]; then
     SYSROOT=--with-sysroot=$7  
@@ -23,26 +30,11 @@ cd $BASEDIR/3rd/binutils-gdb && \
 mkdir -p build && \
 cd build
 
-if [[ "$ARCH" != "x86_64" ]]; then
-
 # Configure build
 ../configure --target=$TARGET --prefix=$PREFIX/usr --disable-nls --disable-werror \
-	--with-arch=$ARCH --disable-gdb --disable-libdecnumber \
-	--build=x86_64-linux-gnu --host=$HOST \
-	$SYSROOT \
-	--disable-readline --disable-sim
-
-else
-
-# Configure build
-../configure --target=$TARGET --prefix=$PREFIX/usr --disable-nls --disable-werror \
-	--disable-gdb --disable-libdecnumber \
-	--with-system-zlib \
-	--build=x86_64-linux-gnu --host=$HOST \
-	$SYSROOT \
-	--disable-readline --disable-sim
-
-fi
+	$ARCH --disable-gdb --disable-libdecnumber \
+	$ZLIB --build=x86_64-linux-gnu --host=$HOST \
+	$SYSROOT --disable-readline --disable-sim
 
 if [[ $? != 0 ]]; then
 	exit 1
