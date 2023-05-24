@@ -10,12 +10,9 @@ fail () {
 }
 
 BASEDIR=$(pwd)
-PREFIX=$BASEDIR/x86_64
 TARGET=arm-linux-gnueabi
-PREFIX=$BASEDIR/$TARGET
 NPROC=8
 HOST=$(gcc -dumpmachine)
-SYSROOT=$BASEDIR/$TARGET-sysroot
 
 mkdir -p $TARGET
 

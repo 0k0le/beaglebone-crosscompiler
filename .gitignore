@@ -2,3 +2,4 @@ armv7l/**
 x86_64/**
 *.swp
 *-sysroot
+*-cross

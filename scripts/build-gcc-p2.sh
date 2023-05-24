@@ -9,15 +9,21 @@ HOST=$5
 if [[ "$6" != "x86_64" ]]; then
     ARCH=--with-arch=$6
     ZLIB=
+	MLIB=--disable-multilib
+	MLIST=
 else
+	MLIB=--disable-multilib
+    #MLIST=--with-multilib-list=m64,m32,mx32
     ARCH=
-    ZLIB=--with-system-zlib
+	ZLIB=--with-system-zlib
 fi
 
 if [[ "$7" != "none" ]]; then
-    SYSROOT=--with-sysroot=$7  
+    SYSROOT=--with-sysroot=$7 
+	#BSYSROOT=--with-build-sysroot=$7
 else
     SYSROOT=
+	BSYSROOT=
 fi
 
 echo "[GCC Part 2 build info]"
@@ -37,8 +43,8 @@ if [[ $? != 0 ]]; then
     exit 1
 fi
 
-../configure --target=$TARGET --prefix=$PREFIX --with-gnu-ld --with-gnu-as \
-	$SYSROOT $ARCH $ZLIB \
+CFLAGS="$CFLAGS -O2 -D__x86_64__" ../configure --target=$TARGET --prefix=$PREFIX/usr  \
+	$SYSROOT $BSYSROOT $ARCH $ZLIB \
 	--build=x86_64-linux-gnu --host=$HOST \
 	--disable-bootstrap \
 	--disable-libsanitizer \
@@ -48,7 +54,7 @@ fi
 	--disable-libquadmath \
 	--disable-libssp --disable-libvtv \
 	--disable-libcilkrts --disable-libatomic \
-	--enable-shared --disable-nls --disable-multilib \
+	--enable-shared --disable-nls $MLIB $MLIST \
 	--enable-languages=c,c++
 
 if [[ $? != 0 ]]; then

@@ -9,9 +9,18 @@ HOST=$5
 if [[ "$6" != "x86_64" ]]; then
     ARCH=--with-arch=$6 
     ZLIB=
+	MLIB=--disable-multilib
+	MLIST=
+	MARCH=
+	ETARGETS=
 else
-    ARCH=
+	#ETARGETS=--enable-targets=all
+	MLIB=--disable-multilib
+	#MARCH=--enable-multiarch
+    #MLIST=--with-multilib-list=m64,m32,mx32
+	ARCH=
     ZLIB=--with-system-zlib
+	#HOST=i686-linux-gnu
 fi
 
 if [[ "$7" != "none" ]]; then
@@ -38,7 +47,7 @@ cd build
 	--build=x86_64-linux-gnu --host=$HOST \
 	$SYSROOT $ARCH $ZLIB \
 	--disable-bootstrap \
-	--disable-shared --disable-nls --disable-multilib \
+	--disable-shared --disable-nls $ETARGETS $MLIB $MARCH $MLIST \
 	--disable-threads \
 	--with-newlib --without-headers \
 	--enable-languages=c,c++ \
