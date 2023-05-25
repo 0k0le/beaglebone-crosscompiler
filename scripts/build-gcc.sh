@@ -7,12 +7,13 @@ NPROC=$4
 PART=$5
 
 dump () {
-	echo "BASEDIR: $BASEDIR"
-	echo "TARGET: $TARGET"
-	echo "PREFIX: $PREFIX"
-	echo "NPROC: $NPROC"
-	echo "PART: $PART"
+    echo "BASEDIR: $BASEDIR"
+    echo "TARGET: $TARGET"
+    echo "PREFIX: $PREFIX"
+    echo "NPROC: $NPROC"
+    echo "PART: $PART"         
 }
+
 
 usage () {
     echo "USAGE: $0 [BASEDIR] [TARGET] [PREFIX] [NPROC] [PART]"
@@ -22,8 +23,8 @@ usage () {
 fail () {
     echo [ERROR] $@
     dump
-	exit 1   
-} 
+	exit 1                     
+}
   
 create_build_dir () {          
     cd $BASEDIR/3rd/$1         
@@ -37,23 +38,28 @@ create_build_dir () {
 }
 
 configure_build () {
-    cd $BASEDIR/3rd/glibc/build 
-	../configure --prefix=$PREFIX --build=$(gcc -dumpmachine) \
-        --host=$TARGET --target=$TARGET --with-headers=$PREFIX/include \
-        --disable-multilib libc_cv_forced_unwind=yes --disable-werror
+    cd $BASEDIR/3rd/gcc/build 
+	../configure --prefix=$PREFIX --target=$TARGET \
+		--enable-languages=c,c++ --disable-multilib \
+		--with-float=hard
+
+	exit $?
 }
 
 build_p1 () {
-	cd $BASEDIR/3rd/glibc/build
-    make install-bootstrap-headers=yes install-headers && \
-    make -j$NPROC csu/subdir_lib && \
-    install csu/crt1.o csu/crti.o csu/crtn.o $PREFIX/lib && \
-    $TARGET-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o $PREFIX/lib/libc.so && \
-    touch $PREFIX/include/gnu/stubs.h
+    cd $BASEDIR/3rd/gcc/build && \
+	make -j$NPROC all-gcc && \
+    make install-gcc
 }
 
 build_p2 () {
-	cd $BASEDIR/3rd/glibc/build
+	cd $BASEDIR/3rd/gcc/build && \
+	make -j$NPROC all-target-libgcc && \ 
+	make install-target-libgcc
+}
+
+build_p3 () {
+	cd $BASEDIR/3rd/gcc/build && \
 	make -j$NPROC && \
 	make install
 }
@@ -63,12 +69,16 @@ if [[ $# != 5 ]]; then
 fi
 
 if [[ "$PART" == "1" ]]; then
-	create_build_dir glibc
+	create_build_dir gcc && \
 	configure_build && \
 	build_p1
-else
+elif [[ "$PART" == "2" ]]; then
 	build_p2
+elif [[ "$PART" == "3" ]]; then
+	build_p3
 fi
+
+cd $BASEDIR
 
 if [[ $? != 0 ]]; then
 	dump
@@ -76,12 +86,6 @@ if [[ $? != 0 ]]; then
 fi
 
 exit 0
-
-
-
-
-
-
 
 
 

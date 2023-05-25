@@ -1,57 +1,56 @@
 #!/bin/bash
 
 BASEDIR=$1
-PREFIX=$2
-TARGET=$3
+TARGET=$2
+PREFIX=$3
 NPROC=$4
-HOST=$5
 
-if [[ "$6" != "x86_64" ]]; then
-	ARCH=--with-arch=$6
-	ZLIB=
-else
-	ARCH=
-	ZLIB=--with-system-zlib
-fi
-
-if [[ "$7" != "none" ]]; then
-    SYSROOT=--with-sysroot=$7  
-else
-    SYSROOT=
-fi
-
-echo "[BINUTILS build info]"
-echo "BASEDIR: $BASEDIR"
-echo "PREFIX: $PREFIX"
-echo "TARGET: $TARGET"
-
-# Create build directory
-cd $BASEDIR/3rd/binutils-gdb && \
-mkdir -p build && \
-cd build
-
-# Configure build
-../configure --target=$TARGET --prefix=$PREFIX/usr --disable-nls --disable-werror \
-	$ARCH --disable-gdb --disable-libdecnumber \
-	$ZLIB --build=x86_64-linux-gnu --host=$HOST \
-	$SYSROOT --disable-readline --disable-sim
-
-if [[ $? != 0 ]]; then
+usage () {
+	echo "USAGE: $0 [BASEDIR] [TARGET] [PREFIX] [NPROC]"
 	exit 1
+}
+
+fail () {
+	echo [ERROR] $@
+	exit 1
+}
+
+create_build_dir () {		
+	cd $BASEDIR/3rd/$1
+	cd build && make distclean
+	cd $BASEDIR/3rd/$1 && rm -rf build && \
+	mkdir -p build && cd build
+
+	if [[ $? != 0 ]]; then
+		fail "Failed to create builddir"
+	fi
+}
+
+configure_build () {
+	cd $BASEDIR/3rd/binutils-gdb/build
+	../configure --prefix=$PREFIX --with-gnu-ld --with-gnu-as \
+    	--target=$TARGET --disable-multilib \
+    	--disable-werror --disable-gdb
+}
+
+build () {
+	make -j$NPROC
+	make install
+}
+
+if [[ $# != 4 ]]; then
+	usage
 fi
 
-# Build
-make -j$NPROC && \
-make install && \
-echo "BINUTILS has compiled successfully for $TARGET in $PREFIX" && \
+create_build_dir binutils-gdb && \
+configure_build && \
+build && \
+echo "BINUTILS Built Successfully" && \
 exit 0
 
-echo "[BINUTILS build info]"
-echo "BASEDIR: $BASEDIR"
-echo "PREFIX: $PREFIX"
-echo "TARGET: $TARGET"
-echo "NPROC: $NPROC"
-echo "ARCH: $ARCH"
-echo "HOST: $HOST"
+cd $BASEDIR
 
 exit 1
+
+
+

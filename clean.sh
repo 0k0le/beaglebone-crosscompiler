@@ -2,6 +2,8 @@
 
 BASEDIR=$(pwd)
 
+rm -rf *-cross
+
 cd $BASEDIR/3rd/gcc/build && \
 make distclean && \
 cd .. && \
