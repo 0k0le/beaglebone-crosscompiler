@@ -5,9 +5,11 @@ fail() {
 	exit 1
 }
 
-TARGET=arm-linux-gnueabi
+TARGET=arm-linux-gnueabihf
 BASEDIR=$(pwd)
 NPROC=20
+
+scripts/update-modules.sh
 
 # Setup cross directory
 rm -rf $BASEDIR/$TARGET-cross
@@ -39,7 +41,7 @@ if [[ $? != 0 ]]; then
 fi
 
 # KERNEL HEADERS
-cd $BASEDIR/3rd/linux
+cd $BASEDIR/3rd/ti-linux-kernel
 make ARCH=arm INSTALL_HDR_PATH=$BASEDIR/$TARGET-cross/$TARGET headers_install
 
 if [[ $? != 0 ]]; then
@@ -61,7 +63,8 @@ fi
 
 # configure
 ../configure --prefix=$BASEDIR/$TARGET-cross --target=$TARGET \
-		--enable-languages=c,c++ --disable-multilib
+		--enable-languages=c,c++ --disable-multilib \
+		--with-float=hard
 
 # build
 make -j$NPROC all-gcc && \
