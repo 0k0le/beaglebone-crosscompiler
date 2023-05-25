@@ -24,14 +24,11 @@ fi
 echo "Finished binutils"
 
 # KERNEL HEADERS
-cd $BASEDIR/3rd/ti-linux-kernel
-make ARCH=arm INSTALL_HDR_PATH=$BASEDIR/$TARGET-cross/$TARGET headers_install
+scripts/copy-kernel-headers.sh $BASEDIR arm $BASEDIR/$TARGET-cross/$TARGET
 
 if [[ $? != 0 ]]; then
 	fail "Failed to install linux kernel headers"
 fi
-
-cd $BASEDIR
 
 echo "Finished kernel headers"
 
