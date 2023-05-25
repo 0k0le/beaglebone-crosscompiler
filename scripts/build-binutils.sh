@@ -5,6 +5,13 @@ TARGET=$2
 PREFIX=$3
 NPROC=$4
 
+dump () {
+	echo "BASEDIR: $BASEDIR"
+	echo "TARGET: $TARGET"
+	echo "PREFIX: $PREFIX"
+	echo "NPROC: $NPROC"
+}
+
 usage () {
 	echo "USAGE: $0 [BASEDIR] [TARGET] [PREFIX] [NPROC]"
 	exit 1
@@ -12,6 +19,7 @@ usage () {
 
 fail () {
 	echo [ERROR] $@
+	dump
 	exit 1
 }
 
@@ -34,7 +42,7 @@ configure_build () {
 }
 
 build () {
-	make -j$NPROC
+	make -j$NPROC && \
 	make install
 }
 
@@ -48,8 +56,7 @@ build && \
 echo "BINUTILS Built Successfully" && \
 exit 0
 
-cd $BASEDIR
-
+dump
 exit 1
 
 

@@ -66,8 +66,10 @@ if [[ "$PART" == "1" ]]; then
 	create_build_dir glibc
 	configure_build && \
 	build_p1
-else
+elif [[ "$PART" == "2" ]]; then
 	build_p2
+else
+	usage
 fi
 
 if [[ $? != 0 ]]; then

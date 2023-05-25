@@ -42,8 +42,6 @@ configure_build () {
 	../configure --prefix=$PREFIX --target=$TARGET \
 		--enable-languages=c,c++ --disable-multilib \
 		--with-float=hard
-
-	exit $?
 }
 
 build_p1 () {
@@ -76,9 +74,9 @@ elif [[ "$PART" == "2" ]]; then
 	build_p2
 elif [[ "$PART" == "3" ]]; then
 	build_p3
+else
+	usage
 fi
-
-cd $BASEDIR
 
 if [[ $? != 0 ]]; then
 	dump
