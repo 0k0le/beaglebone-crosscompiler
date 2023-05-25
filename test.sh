@@ -7,7 +7,7 @@ fail() {
 
 TARGET=arm-linux-gnueabi
 BASEDIR=$(pwd)
-NPROC=8
+NPROC=20
 
 # Setup cross directory
 rm -rf $BASEDIR/$TARGET-cross
@@ -16,7 +16,9 @@ mkdir -p $BASEDIR/$TARGET-cross
 # BINUTILS
 # setup build dir
 cd $BASEDIR/3rd/binutils-gdb/
-cd build && make distclean && cd .. && rm -rf build
+cd build && make distclean
+cd $BASEDIR/3rd/binutils-gdb
+rm -rf $BASEDIR/3rd/binutils/build
 mkdir -p build && cd build
 
 if [[ $? != 0 ]]; then
@@ -47,7 +49,10 @@ fi
 # BUILD S1 GCC
 # Setup gcc builddir
 cd $BASEDIR/3rd/gcc/
-cd build && make distclean && cd .. && rm -rf build
+contrib/download_prerequisites
+cd build && make distclean
+cd $BASEDIR/3rd/gcc
+rm -rf $BASEDIR/3rd/gcc/build
 mkdir -p build && cd build
 
 if [[ $? != 0 ]]; then
@@ -68,7 +73,9 @@ fi
 
 # BUILD S1 GLIBC
 cd $BASEDIR/3rd/glibc/
-cd build && make distclean && cd .. && rm -rf build
+cd build && make distclean
+cd $BASEDIR/3rd/glibc
+rm -rf $BASEDIR/3rd/glibc/build
 mkdir -p build && cd build
 
 if [[ $? != 0 ]]; then
