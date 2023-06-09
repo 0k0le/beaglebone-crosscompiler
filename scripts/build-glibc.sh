@@ -40,7 +40,7 @@ configure_build () {
     cd $BASEDIR/3rd/glibc/build 
 	../configure --prefix=$PREFIX --build=$(gcc -dumpmachine) \
         --host=$TARGET --target=$TARGET --with-headers=$PREFIX/include \
-        --disable-multilib libc_cv_forced_unwind=yes --disable-werror
+        --disable-multilib libc_cv_forced_unwind=yes --disable-werror --with-arch=armv7a
 }
 
 build_p1 () {

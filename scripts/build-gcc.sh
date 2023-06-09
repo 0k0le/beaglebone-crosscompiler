@@ -37,6 +37,11 @@ create_build_dir () {
     fi
 }
 
+download_prereq () {
+	cd $BASEDIR/3rd/gcc/
+	contrib/download_prerequisites
+}
+
 configure_build () {
     cd $BASEDIR/3rd/gcc/build 
 	../configure --prefix=$PREFIX --target=$TARGET \
@@ -67,6 +72,7 @@ if [[ $# != 5 ]]; then
 fi
 
 if [[ "$PART" == "1" ]]; then
+	download_prereq && \
 	create_build_dir gcc && \
 	configure_build && \
 	build_p1
